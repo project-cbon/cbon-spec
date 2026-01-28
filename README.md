@@ -68,7 +68,7 @@ class User extends BaseEntity {
 class OrderItem {
     required ProductCode code;
     required Natural<int> quantity;
-    required (int | decimal) unit_price; 
+    required int|decimal unit_price; 
 }
 
 /** 配送情報 */
