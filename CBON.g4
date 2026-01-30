@@ -116,6 +116,7 @@ enum_value_ref
 scalar
     : STRING
     | multiline_string
+    | binary_literal
     | INT
     | DECIMAL
     | BOOLEAN
@@ -127,6 +128,11 @@ scalar
 
 multiline_string
     : TEXT_LINE+
+    ;
+
+binary_literal
+    : HEX_BINARY
+    | BASE64_BINARY
     ;
 
 collection
@@ -188,7 +194,7 @@ RPAREN       : ')' ;
 
 // Primitive Types
 PRIMITIVE_TYPE_ID
-    : 'string' | 'int' | 'decimal' | 'boolean' | 'mail' | 'datetime' | 'date' | 'time'
+    : 'string' | 'int' | 'decimal' | 'boolean' | 'mail' | 'datetime' | 'date' | 'time' | 'binary'
     ;
 
 // Literals
@@ -201,8 +207,11 @@ DECIMAL        : '-'? [0-9]+ '.' [0-9]+ ;
 INT            : '-'? [0-9]+ ;
 STRING         : '"' ( '\\"' | . )*? '"' ;
 MAIL           : [a-zA-Z0-9._%+-]+ '@' [a-zA-Z0-9.-]+ '.' [a-zA-Z]{2,} ;
+HEX_BINARY     : 'X\'' [0-9a-fA-F]* '\'' ;
+BASE64_BINARY  : BASE64_LINE+ ;
 
-TEXT_LINE : '| ' ~[\r\n]* ([\r\n]+ | EOF) ;
+TEXT_LINE   : '| ' ~[\r\n]* ([\r\n]+ | EOF) ;
+BASE64_LINE : '$ ' [a-zA-Z0-9+/=]+ ([\r\n]+ | EOF) ;
 
 TYPE_ID : [A-Z][a-zA-Z0-9]* ;
 ID      : [a-z_][a-zA-Z0-9_]* ;
