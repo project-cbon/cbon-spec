@@ -43,7 +43,7 @@ accept_def
 
 /** class User extends BaseEntity { ... } */
 class_def
-    : DOC_COMMENT? CLASS type_reference (EXTENDS type_reference)? LBRACE field_def* (group_def | initial_def)* RBRACE
+    : DOC_COMMENT? CLASS type_reference (EXTENDS type_reference)? LBRACE field_def* (group_def | initial_def)* RBRACE SEMI?
     ;
 
 /** required string name; */
@@ -115,6 +115,7 @@ enum_value_ref
 
 scalar
     : STRING
+    | multiline_string
     | INT
     | DECIMAL
     | BOOLEAN
@@ -122,6 +123,10 @@ scalar
     | DATETIME
     | DATE
     | TIME
+    ;
+
+multiline_string
+    : TEXT_LINE+
     ;
 
 collection
@@ -196,6 +201,8 @@ DECIMAL        : '-'? [0-9]+ '.' [0-9]+ ;
 INT            : '-'? [0-9]+ ;
 STRING         : '"' ( '\\"' | . )*? '"' ;
 MAIL           : [a-zA-Z0-9._%+-]+ '@' [a-zA-Z0-9.-]+ '.' [a-zA-Z]{2,} ;
+
+TEXT_LINE : '| ' ~[\r\n]* ([\r\n]+ | EOF) ;
 
 TYPE_ID : [A-Z][a-zA-Z0-9]* ;
 ID      : [a-z_][a-zA-Z0-9_]* ;
