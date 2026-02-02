@@ -24,46 +24,55 @@ definition
 
 /** enum ProductType { Type1, Type2 } */
 enum_def
-    : DOC_COMMENT? ENUM TYPE_ID LBRACE enum_member (COMMA enum_member)* COMMA? RBRACE SEMI?
+    : decorators ENUM TYPE_ID LBRACE enum_member (COMMA enum_member)* COMMA? RBRACE SEMI?
     ;
 
 enum_member
-    : DOC_COMMENT? TYPE_ID
+    : decorators TYPE_ID
     ;
 
 /** regexp ProductCode /^[A-Z]{3}-[0-9]{5}$/; */
 regexp_def
-    : DOC_COMMENT? REGEXP TYPE_ID REGEXP_LITERAL SEMI
+    : decorators REGEXP TYPE_ID REGEXP_LITERAL SEMI
     ;
 
 /** accept PaymentMethod { "CreditCard", "PayPal", "BankTransfer" } */
 accept_def
-    : DOC_COMMENT? ACCEPT TYPE_ID LBRACE value (COMMA value)* COMMA? RBRACE SEMI?
+    : decorators ACCEPT TYPE_ID LBRACE value (COMMA value)* COMMA? RBRACE SEMI?
     ;
 
 /** class User extends BaseEntity { ... } */
 class_def
-    : DOC_COMMENT? CLASS type_reference (EXTENDS type_reference)? LBRACE field_def* (group_def | initial_def)* RBRACE SEMI?
+    : decorators CLASS type_reference (EXTENDS type_reference)? LBRACE field_def* (group_def | initial_def)* RBRACE SEMI?
     ;
 
 /** required string name; */
 field_def
-    : DOC_COMMENT? (REQUIRED | OPTIONAL | CHOOSE) union_type ID SEMI
+    : decorators (REQUIRED | OPTIONAL | CHOOSE) union_type ID SEMI
     ;
 
 /** exclusive is_drop_off, signature_name; */
 group_def
-    : DOC_COMMENT? (ONEOF | EXCLUSIVE) ID (COMMA ID)+ SEMI
+    : decorators (ONEOF | EXCLUSIVE) ID (COMMA ID)+ SEMI
     ;
 
 /** const type "User"; */
 initial_def
-    : DOC_COMMENT? (CONST | DEFAULT) ID value SEMI
+    : decorators (CONST | DEFAULT) ID value SEMI
     ;
 
 /** range OpenHours<time> { [09:00, 12:00), [13:00, 18:00) }; */
 range_def
-    : DOC_COMMENT? RANGE type_reference LBRACE intervals RBRACE SEMI?
+    : decorators RANGE type_reference LBRACE intervals RBRACE SEMI?
+    ;
+
+decorators
+    : DOC_COMMENT? annotation*
+    ;
+
+annotation
+    : '@' ANNOTATION_ID ( '(' ~')'* ')' )?
+    | '@(' ~')'* ')'
     ;
 
 intervals
@@ -215,6 +224,7 @@ BASE64_LINE : '$ ' [a-zA-Z0-9+/=]+ ([\r\n]+ | EOF) ;
 
 TYPE_ID : [A-Z][a-zA-Z0-9]* ;
 ID      : [a-z_][a-zA-Z0-9_]* ;
+ANNOTATION_ID : [a-zA-Z0-9_-][a-zA-Z0-9_.-]* ;
 
 // Comments & Whitespace
 DOC_COMMENT    : '/**' .*? '*/' ;
