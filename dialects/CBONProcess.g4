@@ -2,8 +2,19 @@ grammar CBONProcess;
 import CBON;
 
 start
-    : definition* process_def* schema_root+ expression_def? EOF
+    : (definition | output_def)* process_def* schema_root+ expression_def? EOF
     | expression_def EOF
+    ;
+
+/** output Markdown<Result> template "**@(type)**: @(message format Markdown)"; */
+output_def
+    : OUTPUT TYPE_ID (LANGLE union_type RANGLE)? TEMPLATE
+      template_block SEMI
+    ;
+
+template_block
+    : STRING
+    | TEXT_LINE+
     ;
 
 /** process Main(Prompt, Data) return(Result) format Markdown; */
@@ -23,5 +34,7 @@ expression_def
 
 
 // Keywords
+OUTPUT   : 'output' ;
+TEMPLATE : 'template' ;
 PROCESS : 'process' ;
 FORMAT  : 'format' ;
