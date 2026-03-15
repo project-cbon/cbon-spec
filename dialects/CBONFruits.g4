@@ -14,7 +14,7 @@ definition
 
 /** alias array<Person> as People; */
 alias_def
-    : decorators ALIAS union_type AS TYPE_ID SEMI
+    : decorators ALIAS union_type AS type_reference SEMI
     ;
 
 /** define Nothing {} as Null; */
