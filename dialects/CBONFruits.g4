@@ -34,6 +34,20 @@ initial_def
     : decorators (PREPEND | APPEND) ID LBRACE value (COMMA value)* RBRACE SEMI
     ;
 
+/** type-variables T */
+union_type
+    : type_atom (PIPE type_atom)*
+    | TYPE_VARIABLES type_atom
+    ;
+
+/** type-reference Person */
+value
+    : scalar
+    | collection
+    | enum_value_ref
+    | TYPE_REFERENCE union_type
+    ;
+
 // Keywords
 AS      : 'as' ;
 ALIAS   : 'alias' ;
@@ -43,3 +57,6 @@ PREFIX  : 'prefix' ;
 SUFFIX  : 'suffix' ;
 PREPEND : 'prepend' ;
 APPEND  : 'append' ;
+
+TYPE_VARIABLES : 'type-variables' ;
+TYPE_REFERENCE : 'type-reference' ;
