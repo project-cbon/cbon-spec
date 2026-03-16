@@ -112,9 +112,7 @@ type_args
 /* --- Data Value Rules --- */
 
 value
-    : scalar
-    | collection
-    | enum_value_ref
+    : decorators (scalar | collection | enum_value_ref)
     ;
 
 /** DeliveryStatus.InTransit */

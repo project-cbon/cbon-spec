@@ -42,10 +42,7 @@ union_type
 
 /** type-reference Person */
 value
-    : scalar
-    | collection
-    | enum_value_ref
-    | TYPE_REFERENCE union_type
+    : decorators (scalar | collection | enum_value_ref | TYPE_REFERENCE union_type)
     ;
 
 // Keywords
