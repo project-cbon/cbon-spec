@@ -24,7 +24,7 @@ process_def
       LPAREN (union_type (COMMA union_type)*)? COMMA? RPAREN 
       RETURN 
       LPAREN (union_type (COMMA union_type)*)? COMMA? RPAREN 
-      (FORMAT TYPE_ID)? SEMI
+      (FORMAT TYPE_ID (WRAP (template_block | TYPE_ID)))? SEMI
     ;
 
 /** Main( Prompt{ ... }, Data{ ... } ) */
@@ -39,3 +39,4 @@ OUTPUT   : 'output' ;
 TEMPLATE : 'template' ;
 PROCESS : 'process' ;
 FORMAT  : 'format' ;
+WRAP    : 'wrap' ;
